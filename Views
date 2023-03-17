@@ -1,0 +1,17 @@
+void printWeight(float weight, int decimalPlacesToPrintWeight){
+  Serial.print("Weight: ");
+  Serial.println(weight, decimalPlacesToPrintWeight);
+}
+
+void printState(LiftState state){
+  if(state == BELOW_FILL_WEIGHT_THRESHOLD){
+    Serial.println("Below fill weight threshold");
+  } else if(state == FILLING){
+    Serial.println("Filling");
+    state = FILLING;
+  } else if(state == ABOVE_FILL_WEIGHT_THRESHOLD){
+    Serial.println("Above fill weight threshold");
+  } else {
+    Serial.println("Unexpected state detected!");    
+  }
+}

@@ -1,0 +1,49 @@
+void closeValve() {
+  digitalWrite(inputAPin, LOW);
+  digitalWrite(inputBPin, HIGH);
+  digitalWrite(enablePin, LOW);
+}
+
+float getCurrentWeight(int loadCellPinToRead){
+  return loadcell.get_units(10);
+}
+
+LiftState getStateFromWeight(float weight){
+  LiftState state;
+
+  if(weight <= BELOW_WEIGHT_THRESHOLD){
+    Serial.println("Below fill weight threshold");
+    state = BELOW_FILL_WEIGHT_THRESHOLD;
+    
+  } else if(weight > BELOW_WEIGHT_THRESHOLD && weight < ABOVE_WEIGHT_THRESHOLD){
+    Serial.println("Filling");
+    state = FILLING;
+    
+  } else if(weight >= ABOVE_WEIGHT_THRESHOLD){
+    Serial.println("Above fill weight threshold");
+    state = ABOVE_FILL_WEIGHT_THRESHOLD;
+  } else {
+    Serial.println("Unexpected situation detected, exiting!");
+    exit(1);
+  }
+
+  return state;
+}
+
+void openValve() {
+  digitalWrite(inputAPin, HIGH);
+  digitalWrite(inputBPin, LOW);
+  digitalWrite(enablePin, HIGH);
+}
+
+void setupMotorDriver() {
+  pinMode(enablePin, OUTPUT);
+  pinMode(inputAPin, OUTPUT);
+  pinMode(inputBPin, OUTPUT);
+}
+
+void setupLoadCell(){
+  loadcell.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  loadcell.set_scale(LOADCELL_DIVIDER);
+  loadcell.tare();
+}
